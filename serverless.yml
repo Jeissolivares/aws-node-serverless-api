@@ -1,0 +1,69 @@
+service: aws-node-serverless-api
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: us-east-1
+  profile: serverlessAwsUser
+  stage: dev
+  environment:
+    devEnv: development
+    prodEnv: production
+
+plugins:
+  - serverless-offline
+  - serverless-aws-documentation
+
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - httpApi:
+          path: /
+          method: get
+  getUsers:
+    handler: src/controllers/users.getUsers
+    events:
+      - httpApi:
+          path: /users/getUsers
+          method: get
+  getUser:
+    handler: src/controllers/users.getUser
+    events:
+      - httpApi:
+          path: /users/getUser/{id}
+          method: get
+  createUser:
+    handler: src/controllers/users.createUser
+    events:
+      - httpApi:
+          path: /users/createUser
+          method: post
+  createUserTest:
+    handler: src/controllers/userTest.createUserTest
+    events:
+      - httpApi:
+          path: /userTest/createUserTest
+          method: post
+  getUserTest:
+    handler: src/controllers/userTest.getUserTest
+    events:
+      - httpApi:
+          path: /userTest/getUserTest
+          method: get
+    
+
+
+# resources:
+#   Resources:
+#     pg:
+#       Type: AWS::RDS::DBInstance
+#       Properties:
+#         MasterUsername: postgres
+#         MasterUserPassword: 1234567
+#         DatabaseName: postgres
+#         Engine: postgres
+#         EnableHttpEndpoint: true
+#         StorageEncrypted: true          
